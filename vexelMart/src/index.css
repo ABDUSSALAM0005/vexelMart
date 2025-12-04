@@ -1,0 +1,49 @@
+/* 1. FONT IMPORTS (MUST BE FIRST) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@500;700&display=swap');
+
+/* 2. TAILWIND DIRECTIVES (MUST COME AFTER IMPORTS, BEFORE @layer BASE) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 3. SHADCN VARIABLES AND GLOBAL STYLES (MUST BE INSIDE @layer BASE) */
+@layer base {
+  :root {
+    /* 🚨 PREMIUM MARKETPLACE DARK THEME HSL VALUES 🚨 */
+    --background: 222 47% 11%;      /* #0f172a (Slate-900) */
+    --foreground: 210 40% 98%;      /* #f8fafc (Off-White Text) */
+    
+    --card: 215 28% 20%;            /* #1e293b (Slate-800) */
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%; 
+
+    --primary: 238 92% 67%;         /* #6366f1 (Indigo-500 Action Button) */
+    --primary-foreground: 210 40% 98%; 
+
+    --secondary: 215 28% 30%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 215 28% 25%;
+    --muted-foreground: 210 40% 70%; 
+    
+    --accent: 156 59% 52%;          /* #34d399 (Emerald-400 Sales/Success) */
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 215 28% 25%;          
+    --input: 215 28% 25%;
+    --ring: 238 92% 67%;
+
+    --radius: 0.5rem; 
+  }
+  
+  body {
+    /* Sets the dark theme directly using the variables */
+    background-color: hsl(var(--background)); 
+    color: hsl(var(--foreground)); 
+  }
+}
