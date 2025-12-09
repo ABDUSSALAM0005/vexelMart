@@ -1,6 +1,8 @@
 // 
 
 import { motion } from "framer-motion"
+import { useEffect } from "react"
+import { useState } from "react"
 
 const callouts = [
   {

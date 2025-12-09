@@ -73,10 +73,31 @@
 //   )
 // }
 
-import data from "../data"
+// import data from "../data"
 import { motion } from "framer-motion"
+import api from "./lib/axios"
+import { useState, useEffect } from "react"
+
 
 export default function ProductsGrid() {
+
+  
+const [products, setProducts] = useState([])
+
+useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const res = await api.get('/products');
+      console.log(res.data);
+      setProducts(res.data);
+    } catch (error) {
+      console.log("error fetching data")
+      console.log(error)
+    }
+  }
+  fetchProducts();
+}, [])
+
   return (
     <div className="bg-background py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -96,7 +117,7 @@ export default function ProductsGrid() {
 
         {/* GRID */}
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {data.products.map((product) => (
+          {products.map((product) => (
             <motion.div
               key={product.id}
               whileHover={{ scale: 1.02 }}

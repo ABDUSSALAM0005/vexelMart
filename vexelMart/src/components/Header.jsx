@@ -59,7 +59,7 @@ const Header = () => {
           </Button>
 
           {/* Mobile Menu Icon (Show on small screens) */}
-          <Button variant="secondary" size="icon" className="lg:hidden h-9 w-9 text-text-light hover:text-primary">
+          <Button variant="secondary" size="icon" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 lg:hidden  text-text-light hover:text-primary">
             <MobileNav/>
           </Button>
 

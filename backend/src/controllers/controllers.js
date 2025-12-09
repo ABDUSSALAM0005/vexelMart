@@ -1,6 +1,8 @@
 
+import data from "../data.js"
+
 export function getProducts(req, res) {
-    res.status(200).send("You just fetched the notes");
+    res.status(200).send(data.products);
 }
 export function createProducts(req, res) {
     res.status(201).json({ message:"You just fetched the notes" });

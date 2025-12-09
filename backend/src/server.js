@@ -1,8 +1,12 @@
 import express from "express"
 import Routes from "./routes/Routes.js";
-import products from "./data.js"
+import cors from "cors"
 
 const app = express()
+
+app.use(cors ({
+    origin: "http://localhost:5173"
+}))
 
 app.use("/api/products", Routes);
  
