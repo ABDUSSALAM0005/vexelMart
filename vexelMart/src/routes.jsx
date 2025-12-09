@@ -3,8 +3,8 @@ import { Routes, Route } from 'react-router-dom'
 
 import Home from './pages/Home'
 import Contact from './pages/Contact'
-import NoteDetailPage from './pages/NoteDetailPage'
-// import { AnimatePresence } from 'framer-motion'
+import ProductPage from './pages/ProductPage'
+
 
 const AppRoutes = () => {
   return (
@@ -20,6 +20,10 @@ const AppRoutes = () => {
         <Route
         path='/Contact'
         element={<Contact />}
+        />
+        <Route
+        path='/product/:slug'
+        element={<ProductPage />}
         />
 
     </Routes>
