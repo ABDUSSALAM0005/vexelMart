@@ -5,8 +5,8 @@ import { NavLink } from "react-router-dom";
 // E-COMMERCE LINKS (UPDATED FOR VEXEL MART)
 const Links = [
   {
-    name: "Shop All",
-    path: "/shop",
+    name: "Home",
+    path: "/",
   },
   {
     name: "Categories",
@@ -17,7 +17,7 @@ const Links = [
     path: "/orders", // Requires JWT/Login
   },
   {
-    name: "Support",
+    name: "Contact Us",
     path: "/contact",
   },
 ];

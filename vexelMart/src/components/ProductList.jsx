@@ -74,29 +74,24 @@
 // }
 
 // import data from "../data"
-import { motion } from "framer-motion"
-import api from "./lib/axios"
-import { useState, useEffect } from "react"
-
+import { motion } from "framer-motion";
+import useDataFetcher from "../hooks/useDataFetcher";
+import { ArrowRight, Loader2, AlertCircle } from "lucide-react";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
+import Rating from "./Rating";
+import { Link } from 'react-router-dom';
+import { Button } from "@headlessui/react";
+import AddToCartButton from "./AddToCartButton";
 
 export default function ProductsGrid() {
+  const { products, isLoading, error } = useDataFetcher("/products");
 
-  
-const [products, setProducts] = useState([])
-
-useEffect(() => {
-  const fetchProducts = async () => {
-    try {
-      const res = await api.get('/products');
-      console.log(res.data);
-      setProducts(res.data);
-    } catch (error) {
-      console.log("error fetching data")
-      console.log(error)
-    }
+  if (isLoading) {
+    return <Loader />; // ✅ BEST LOCATION
+  } else if (error) {
+    return <Message />;
   }
-  fetchProducts();
-}, [])
 
   return (
     <div className="bg-background py-16">
@@ -127,19 +122,23 @@ useEffect(() => {
               {/* Image Wrapper */}
               <div className="relative w-full h-72 overflow-hidden rounded-t-2xl">
                 <img
-                  src={product.imageSrc}
-                  alt={product.imageAlt}
+                  src={product.image}
                   className="h-full w-full object-cover transition-all duration-300 group-hover:scale-110 group-hover:opacity-90"
                 />
 
                 {/* Hover Overlay */}
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-3">
-                  <button className="px-4 py-2 text-sm font-medium text-white bg-primary/80 hover:bg-primary rounded-xl shadow">
+                
+                  <div className="px-4 py-2 text-sm font-medium text-white bg-primary/80 hover:bg-primary rounded-xl shadow">
+                   <Link to={`/products/slug/${product.slug}`} >
                     View
-                  </button>
-                  <button className="px-4 py-2 text-sm font-medium bg-white text-primary hover:bg-gray-100 rounded-xl shadow">
+                    </Link>
+                  </div>
+                
+                  {/* <button className="px-4 py-2 text-sm font-medium bg-white text-primary hover:bg-gray-100 rounded-xl shadow">
                     Add to Cart
-                  </button>
+                  </button> */}
+                  <AddToCartButton product={product}/>
                 </div>
               </div>
 
@@ -149,12 +148,14 @@ useEffect(() => {
                   {product.name}
                 </h3>
 
-                <p className="text-sm text-gray-400 mt-1">
-                  {product.color}
-                </p>
+                {/* <p className="text-sm text-gray-400 mt-1">{product.color}</p> */}
+                <Rating
+                  rating={product.rating}
+                  numReviews={product.numReviews}
+                />
 
-                <p className="text-2xl font-bold text-primary mt-3">
-                  {product.price}
+                <p className=" text-2xl font-bold text-primary mt-3">
+                  ${product.price}
                 </p>
               </div>
             </motion.div>
@@ -162,6 +163,5 @@ useEffect(() => {
         </div>
       </div>
     </div>
-  )
+  );
 }
-

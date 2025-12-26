@@ -30,7 +30,7 @@ const callouts = [
 
 export default function Collections() {
   return (
-    <section className="bg-card rounded-xl py-16">
+    <section className="bg-card rounded-xl py-10 my-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <h2 className="text-3xl font-bold text-primary">Collections</h2>

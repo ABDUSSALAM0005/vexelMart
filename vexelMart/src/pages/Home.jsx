@@ -35,11 +35,13 @@ import Hero from "../components/Hero";
 import ProductList from "../components/ProductList";
 import Category from "../components/Category";
 
+
 export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="">
+
       <div>
         <Hero />
       </div>
@@ -51,6 +53,7 @@ export default function Example() {
       <div className="mt-10">
         <Category />
       </div>
+
 
     </div>
   );

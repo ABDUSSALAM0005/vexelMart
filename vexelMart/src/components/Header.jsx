@@ -9,6 +9,8 @@ import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button'; 
 import VexelMartLogo from '../assets/img/VexelMartLogo';
 import MobileNav from './MobileNav';
+import CartIcon from './CartIcon';
+
 
 
 const Header = () => {
@@ -54,8 +56,10 @@ const Header = () => {
           </Button>
 
           {/* Shopping Cart Icon */}
-          <Button variant="" size="icon" className="relative h-9 w-9 text-text-light hover:text-primary">
-            <ShoppingCart className="h-6 w-6" />
+          <Button asChild variant="" size="icon" className="relative h-9 w-9 text-text-light hover:text-primary"> 
+            <Link to="/cart" >
+               <CartIcon/>
+            </Link>
           </Button>
 
           {/* Mobile Menu Icon (Show on small screens) */}

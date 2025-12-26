@@ -11,26 +11,32 @@ const data = {
       imageAlt: "Front of men's Basic Tee in black.",
       price: "$35",
       color: "Black",
+      slug: "basic-tree",
+      countInStock: 4,
     },
     {
       id: 2,
-      name: "Basic Tee",
+      name: "White tea",
       href: "#",
       imageSrc:
         "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-02.jpg",
       imageAlt: "Front of men's Basic Tee in white.",
       price: "$35",
       color: "Aspen White",
+      slug: "white-tea",
+      countInStock: 2,
     },
     {
       id: 3,
-      name: "Basic Tee",
+      name: "Dark",
       href: "#",
       imageSrc:
         "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-03.jpg",
       imageAlt: "Front of men's Basic Tee in dark gray.",
       price: "$35",
       color: "Charcoal",
+      slug: "charcoal",
+      countInStock: 8,
     },
     {
       id: 4,
@@ -42,6 +48,8 @@ const data = {
         "Front of men's Artwork Tee in peach with white and brown dots forming an isometric cube.",
       price: "$35",
       color: "Iso Dots",
+      slug: "artwork-tee",
+      countInStock: 0,
     },
     {
       id: 5,
@@ -52,6 +60,8 @@ const data = {
         "Front of men's Artwork Tee in peach with white and brown dots forming an isometric cube.",
       price: "$75",
       color: "Iso Dots",
+      slug: "nike-slim-shirt",
+      countInStock: 101,
     },
     {
       id: 6,
@@ -62,6 +72,8 @@ const data = {
         "Front of men's Artwork Tee in peach with white and brown dots forming an isometric cube.",
       price: "$29",
       color: "Iso Dots",
+      slug: "adidas-fit-pant",
+      countInStock: 17,
     },
     {
       id: 7,
@@ -72,6 +84,8 @@ const data = {
         "Front of men's Artwork Tee in peach with white and brown dots forming an isometric cube.",
       price: "$34",
       color: "Iso Dots",
+      slug: "gorno-shoe",
+      countInStock: 29,
     },
     {
       id: 8,
@@ -82,6 +96,8 @@ const data = {
         "Front of men's Artwork Tee in peach with white and brown dots forming an isometric cube.",
       price: "$43",
       color: "Iso Dots",
+      slug: "shirt-1",
+      countInStock: 0,
     },
     {
       id: 9,
@@ -92,6 +108,8 @@ const data = {
         "Front of men's Artwork Tee in peach with white and brown dots forming an isometric cube.",
       price: "$89",
       color: "Iso Dots",
+      slug: "shirt-2",
+      countInStock: 1,
     },
     {
       id: 10,
@@ -102,6 +120,8 @@ const data = {
         "Front of men's Artwork Tee in peach with white and brown dots forming an isometric cube.",
       price: "$30",
       color: "Iso Dots",
+      slug: "shirt-3",
+      countInStock: 0,
     },
     {
       id: 11,
@@ -112,6 +132,8 @@ const data = {
         "Front of men's Artwork Tee in peach with white and brown dots forming an isometric cube.",
       price: "$57",
       color: "Iso Dots",
+      slug: "trouser-1",
+      countInStock: 47,
     },
     {
       id: 12,
@@ -122,6 +144,8 @@ const data = {
         "Front of men's Artwork Tee in peach with white and brown dots forming an isometric cube.",
       price: "$49",
       color: "Iso Dots",
+      slug: "trouser-2",
+      countInStock: 13,
     },
     {
       id: 13,
@@ -132,6 +156,8 @@ const data = {
         "Front of men's Artwork Tee in peach with white and brown dots forming an isometric cube.",
       price: "$28",
       color: "Iso Dots",
+      slug: "shirt-4",
+      countInStock: 0,
     },
     {
       id: 14,
@@ -142,6 +168,8 @@ const data = {
         "Front of men's Artwork Tee in peach with white and brown dots forming an isometric cube.",
       price: "$28",
       color: "Iso Dots",
+      slug: "p-4",
+      countInStock: 201,
     },
   ],
 };
