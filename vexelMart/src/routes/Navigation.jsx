@@ -7,6 +7,10 @@ import Layout from "../components/Layout"
 import Error from "../components/Error"
 import CartPage from "../pages/CartPage"
 import SignIn from "../pages/SignIn"
+import Shipping from "../pages/Shipping"
+import ProtectedRoute from "./ProtectedRoute"
+import ProfilePage from "../pages/ProfilePage"
+import Register from "../pages/Register"
 
 const router = createBrowserRouter([
   {
@@ -31,6 +35,22 @@ const router = createBrowserRouter([
         path: "/signin",
         element: <SignIn />,
       },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+      {
+        path: "/shipping",
+        element: <Shipping />,
+      },
+      {
+        path: "/profile",
+        element: 
+        <ProtectedRoute>
+          <ProfilePage/>
+        </ProtectedRoute>
+      }
+
     ],
   },
 ])

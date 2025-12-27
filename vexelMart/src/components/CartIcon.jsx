@@ -11,8 +11,7 @@ const CartIcon = () => {
   );
 
   return (
-    <Link to="/cart" className="relative">
-        <div>
+        <div className="relative"> 
       <ShoppingCart className="w-6 h-6"/>
       {totalQty > 0 && (
         <span className="absolute -top-4 -right-4 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
@@ -20,7 +19,6 @@ const CartIcon = () => {
         </span>
       )}
       </div>
-    </Link>
   );
 };
 

@@ -114,7 +114,7 @@ export default function ProductsGrid() {
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {products.map((product) => (
             <motion.div
-              key={product.id}
+              key={product._id}
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
               className="group relative rounded-2xl bg-card/40 backdrop-blur-lg border border-white/10 shadow-lg hover:shadow-2xl overflow-hidden"

@@ -45,7 +45,7 @@ const MobileNav = () => {
         <SheetContent>
           <motion.div>
             {/*Logo*/}
-            <SheetTitle className="mt-32 mb-40 text-center text-2xl">
+            <SheetTitle className="mt-32 mb-40 text-center text-2xl ">
               <NavLink className="flex justify-center" to="/">
                 <span>
                   <VexelMartLogo className="h-7 w-auto" />

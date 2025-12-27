@@ -27,19 +27,36 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    
+    cartItems: [
+      {
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
+        },
+        qty: {
+          type: Number,
+          required: true,
+          default: 1,
+        },
+      },
+    ],
   },
+  
   {
     timestamps: true,
   }
 );
 
 // Hash password
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
-
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+userSchema.pre("save", async function () {
+  if (this.isModified("password")) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  }
 });
+
 
 // Match password
 userSchema.methods.matchPassword = async function (enteredPassword) {
