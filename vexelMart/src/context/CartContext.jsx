@@ -182,28 +182,30 @@ const cartReducer = (state, action) => {
     case "CLEAR_CART":
       return { cartItems: [] };
 
-    case "ADD_TO_CART": {
-      const item = action.payload;
-      const existing = state.cartItems.find(
-        (p) => p.product && p.product._id === item.product._id
-      );
+case "ADD_TO_CART": {
+  const item = action.payload;
 
-      if (existing) {
-        return {
-          ...state,
-          cartItems: state.cartItems.map((p) =>
-            p.product && p.product._id === item.product._id
-              ? { ...p, qty: p.qty + item.qty }
-              : p
-          ),
-        };
-      }
+  const existing = state.cartItems.find(
+    (x) => x.product._id === item.product._id
+  );
 
-      return {
-        ...state,
-        cartItems: [...state.cartItems, { ...item }],
-      };
-    }
+  if (existing) {
+    return {
+      ...state,
+      cartItems: state.cartItems.map((x) =>
+        x.product._id === item.product._id
+          ? { ...x, qty: x.qty + 1 }
+          : x
+      ),
+    };
+  }
+
+  return {
+    ...state,
+    cartItems: [...state.cartItems, item],
+  };
+}
+
 
     case "UPDATE_QTY":
       return {
@@ -244,8 +246,11 @@ export const CartProvider = ({ children }) => {
             headers: { Authorization: `Bearer ${user.token}` },
           });
 
+        // ✅ FORCE cartItems to always be an array
+        
+
           // Filter out any null products
-          const filteredData = data.filter((item) => item.product !== null);
+        const filteredData = Array.isArray(data) ? data : data.cartItems || [];
           dispatch({ type: "SET_CART", payload: filteredData });
         } catch (err) {
           console.error("Failed to fetch cart:", err);

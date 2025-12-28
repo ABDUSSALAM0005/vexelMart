@@ -74,7 +74,7 @@ export const addToCart = async (req, res) => {
     );
 
     if (existItem) {
-      existItem.qty += qty;
+      existItem.qty = qty;
     } else {
       user.cartItems.push({ product: productId, qty });
     }

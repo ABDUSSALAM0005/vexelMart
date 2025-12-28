@@ -1,3 +1,29 @@
+// import { ShoppingCart } from "lucide-react";
+// import { useCart } from "../context/CartContext";
+// import { Link } from "react-router-dom";
+
+// const CartIcon = () => {
+//   const { state } = useCart();
+
+//   const totalQty = state.cartItems.reduce(
+//     (sum, item) => sum + item.qty,
+//     0
+//   );
+
+//   return (
+//         <div className="relative"> 
+//       <ShoppingCart className="w-6 h-6"/>
+//       {totalQty > 0 && (
+//         <span className="absolute -top-4 -right-4 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+//           {totalQty}
+//         </span>
+//       )}
+//       </div>
+//   );
+// };
+
+// export default CartIcon;
+
 import { ShoppingCart } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
@@ -5,21 +31,26 @@ import { Link } from "react-router-dom";
 const CartIcon = () => {
   const { state } = useCart();
 
-  const totalQty = state.cartItems.reduce(
-    (sum, item) => sum + item.qty,
+  const cartItems = Array.isArray(state.cartItems)
+    ? state.cartItems
+    : [];
+
+  const totalQty = cartItems.reduce(
+    (sum, item) => sum + (item.qty || 0),
     0
   );
 
   return (
-        <div className="relative"> 
-      <ShoppingCart className="w-6 h-6"/>
+    <div className="relative">
+      <ShoppingCart className="w-6 h-6" />
       {totalQty > 0 && (
         <span className="absolute -top-4 -right-4 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
           {totalQty}
         </span>
       )}
-      </div>
+    </div>
   );
 };
 
-export default CartIcon;
+export default CartIcon
+
