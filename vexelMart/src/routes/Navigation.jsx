@@ -11,6 +11,8 @@ import Shipping from "../pages/Shipping"
 import ProtectedRoute from "./ProtectedRoute"
 import ProfilePage from "../pages/ProfilePage"
 import Register from "../pages/Register"
+import PaymentMethod from "../pages/PaymentMethod"
+import PlaceOrder from "../pages/PlaceOrder"
 
 const router = createBrowserRouter([
   {
@@ -41,7 +43,24 @@ const router = createBrowserRouter([
       },
       {
         path: "/shipping",
-        element: <Shipping />,
+        element: 
+        <ProtectedRoute> 
+          <Shipping />
+        </ProtectedRoute>
+      },
+      {
+        path: "/placeorder",
+        element: 
+        <ProtectedRoute> 
+          <PlaceOrder />
+        </ProtectedRoute>
+      },
+      {
+        path: "/payment",
+        element: 
+        <ProtectedRoute>
+        <PaymentMethod />
+        </ProtectedRoute>
       },
       {
         path: "/profile",

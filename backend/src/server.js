@@ -3,6 +3,7 @@ import express from "express"
 import Routes from "./routes/Routes.js";
 import userRoutes from './routes/userRoutes.js'
 import cartRoutes from './routes/cartRoutes.js'
+import orderRoutes from './routes/orderRoutes.js'
 import cors from "cors"
 import dotenv from 'dotenv'
 import path from "path"
@@ -31,6 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/products", Routes);
 app.use("/api/user", userRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("api/orders", orderRoutes)
 
 // if (process.env.NODE_ENV === "production") {
 //   app.use(

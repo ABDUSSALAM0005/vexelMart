@@ -676,7 +676,11 @@ const CartPage = () => {
   };
 
   const checkOutHandler = () => {
-    navigate("/signin?redirect=/shipping");
+    if(!user) {
+      navigate('/signin');
+    } else {
+      navigate('/shipping')
+    }
   };
 
   // Compute subtotal safely

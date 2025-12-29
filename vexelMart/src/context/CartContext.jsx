@@ -72,7 +72,6 @@
 //   );
 // };
 
-
 // import { createContext, useContext, useReducer, useEffect } from "react";
 // import api from "../components/lib/axios";
 // import { useAuth } from "./AuthContext";
@@ -166,7 +165,6 @@
 //   );
 // };
 
-
 import { createContext, useContext, useReducer, useEffect } from "react";
 import api from "../components/lib/axios";
 import { useAuth } from "./AuthContext";
@@ -182,30 +180,27 @@ const cartReducer = (state, action) => {
     case "CLEAR_CART":
       return { cartItems: [] };
 
-case "ADD_TO_CART": {
-  const item = action.payload;
+    case "ADD_TO_CART": {
+      const item = action.payload;
 
-  const existing = state.cartItems.find(
-    (x) => x.product._id === item.product._id
-  );
+      const existing = state.cartItems.find(
+        (x) => x.product._id === item.product._id
+      );
 
-  if (existing) {
-    return {
-      ...state,
-      cartItems: state.cartItems.map((x) =>
-        x.product._id === item.product._id
-          ? { ...x, qty: x.qty + 1 }
-          : x
-      ),
-    };
-  }
+      if (existing) {
+        return {
+          ...state,
+          cartItems: state.cartItems.map((x) =>
+            x.product._id === item.product._id ? { ...x, qty: x.qty + 1 } : x
+          ),
+        };
+      }
 
-  return {
-    ...state,
-    cartItems: [...state.cartItems, item],
-  };
-}
-
+      return {
+        ...state,
+        cartItems: [...state.cartItems, item],
+      };
+    }
 
     case "UPDATE_QTY":
       return {
@@ -225,6 +220,19 @@ case "ADD_TO_CART": {
         ),
       };
 
+     // ✅ FIXED: Save directly to state root (cleaner structure)
+    case "SAVE_SHIPPING_ADDRESS":
+      return {
+        ...state,
+        shippingAddress: action.payload,
+      };
+
+      case "SAVE_PAYMENT_METHOD":
+      return {
+        ...state,
+        paymentMethod: action.payload,
+      };
+
     default:
       return state;
   }
@@ -233,8 +241,19 @@ case "ADD_TO_CART": {
 export const CartProvider = ({ children }) => {
   const { user } = useAuth();
 
+  // const [state, dispatch] = useReducer(cartReducer, {
+  //   cartItems: [],
+  // });
+  
+  // ✅ FIXED: Load address from LocalStorage on first load
   const [state, dispatch] = useReducer(cartReducer, {
     cartItems: [],
+    shippingAddress: localStorage.getItem("shippingAddress")
+      ? JSON.parse(localStorage.getItem("shippingAddress"))
+      : {}, 
+      paymentMethod: localStorage.getItem("paymentMethod")
+      ? JSON.parse(localStorage.getItem("paymentMethod"))
+      : "Paystack"
   });
 
   // Fetch cart from backend when user logs in
@@ -246,11 +265,12 @@ export const CartProvider = ({ children }) => {
             headers: { Authorization: `Bearer ${user.token}` },
           });
 
-        // ✅ FORCE cartItems to always be an array
-        
+          // ✅ FORCE cartItems to always be an array
 
           // Filter out any null products
-        const filteredData = Array.isArray(data) ? data : data.cartItems || [];
+          const filteredData = Array.isArray(data)
+            ? data
+            : data.cartItems || [];
           dispatch({ type: "SET_CART", payload: filteredData });
         } catch (err) {
           console.error("Failed to fetch cart:", err);

@@ -17,3 +17,9 @@ export const logout = () => {
   // Clear local storage here or in the Context
   localStorage.removeItem('userInfo');
 };
+
+// Create a new order
+export const createOrder = async (orderData) => {
+  const { data } = await api.post('/orders', orderData);
+  return data;
+};
