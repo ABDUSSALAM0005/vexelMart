@@ -32,7 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/products", Routes);
 app.use("/api/user", userRoutes);
 app.use("/api/cart", cartRoutes);
-app.use("api/orders", orderRoutes)
+app.use("/api/orders", orderRoutes)
 
 // if (process.env.NODE_ENV === "production") {
 //   app.use(

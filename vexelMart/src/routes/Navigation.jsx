@@ -13,6 +13,7 @@ import ProfilePage from "../pages/ProfilePage"
 import Register from "../pages/Register"
 import PaymentMethod from "../pages/PaymentMethod"
 import PlaceOrder from "../pages/PlaceOrder"
+import Order from "../pages/Order"
 
 const router = createBrowserRouter([
   {
@@ -53,6 +54,13 @@ const router = createBrowserRouter([
         element: 
         <ProtectedRoute> 
           <PlaceOrder />
+        </ProtectedRoute>
+      },
+      {
+        path: "/order/:id",
+        element: 
+        <ProtectedRoute> 
+          <Order />
         </ProtectedRoute>
       },
       {

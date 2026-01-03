@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { createOrder } from "../components/lib/auth"; // Import your API function
+import { createOrder, getOrderDetails } from "../components/lib/auth"; // Import your API function
 import { useAuth } from "../context/AuthContext";
 import toast from 'react-hot-toast';
+import CheckOutSteps from "../components/CheckOutSteps";
 
 export default function PlaceOrder() {
   const navigate = useNavigate();
-  const { state, dispatch } = useCart();
+  const { state, clearCart } = useCart();
   const { user } = useAuth();
   
   const { cartItems, shippingAddress, paymentMethod } = state;
@@ -36,7 +37,7 @@ export default function PlaceOrder() {
   // 2. Handle Place Order
   const placeOrderHandler = async () => {
     try {
-      await createOrder({
+     const newOrder =  await createOrder({
         orderItems: cartItems,
         shippingAddress: shippingAddress,
         paymentMethod: paymentMethod,
@@ -46,15 +47,17 @@ export default function PlaceOrder() {
         totalPrice: totalPrice,
       });
 
+
       // Clear cart after success
-      dispatch({ type: "CLEAR_CART" });
+      await clearCart()
       localStorage.removeItem("cartItems"); // Optional depending on your logic
       
       toast.success("Order Placed Successfully!");
       // Redirect to home or order history
-      navigate("/");
+      navigate(`/order/${ newOrder._id }`);
       
     } catch (error) {
+      console.log(error)
       toast.error(error.response?.data?.message || "Order failed");
     }
   };
@@ -66,7 +69,8 @@ export default function PlaceOrder() {
   }, [paymentMethod, navigate]);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 pt-16 pb-24 sm:px-6 lg:px-8 text-white">
+    <div className="mx-auto max-w-7xl px-4 pt-12 pb-24 sm:px-6 lg:px-8 text-white">
+        <CheckOutSteps step1 step2 step3 step4 />
       <h1 className="text-3xl font-bold tracking-tight text-white">Review Order</h1>
       
       <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">

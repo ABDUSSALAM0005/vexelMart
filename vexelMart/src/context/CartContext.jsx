@@ -178,7 +178,7 @@ const cartReducer = (state, action) => {
       return { ...state, cartItems: action.payload };
 
     case "CLEAR_CART":
-      return { cartItems: [] };
+      return { ...state, cartItems: [] };
 
     case "ADD_TO_CART": {
       const item = action.payload;
@@ -256,6 +256,25 @@ export const CartProvider = ({ children }) => {
       : "Paystack"
   });
 
+  // ✅ 1. NEW FUNCTION TO CLEAR CART (Back & Front end)
+  const clearCart = async () => {
+    // Clear the UI immediately
+    dispatch({ type: "CLEAR_CART" });
+
+    // If user is logged in, tell backend to delete items
+    if (user?.token) {
+      try {
+        // Adjust this endpoint path based on your backend routes
+        // Common examples: api.delete("/cart") or api.post("/cart/clear")
+        await api.delete("/cart", {
+          headers: { Authorization: `Bearer ${user.token}` },
+        });
+      } catch (err) {
+        console.error("Failed to clear backend cart:", err);
+      }
+    }
+  };
+
   // Fetch cart from backend when user logs in
   useEffect(() => {
     const fetchCart = async () => {
@@ -284,7 +303,7 @@ export const CartProvider = ({ children }) => {
   }, [user]);
 
   return (
-    <CartContext.Provider value={{ state, dispatch }}>
+    <CartContext.Provider value={{ state, dispatch, clearCart }}>
       {children}
     </CartContext.Provider>
   );

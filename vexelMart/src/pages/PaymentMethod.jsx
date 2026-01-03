@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
+import CheckoutSteps from "../components/CheckOutSteps";
 
 export default function PaymentMethod() {
   const { state, dispatch } = useCart();
@@ -25,7 +26,8 @@ export default function PaymentMethod() {
   };
 
   return (
-    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+    <div className="flex min-h-full flex-col justify-center px-6 pt-12 lg:px-8">
+            <CheckoutSteps step1 step2 step3  />
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <h2 className="mt-10 text-center text-2xl font-bold tracking-tight text-white">
           Payment Method
@@ -58,13 +60,13 @@ export default function PaymentMethod() {
                 id="COD"
                 name="paymentMethod"
                 type="radio"
-                value="Cash on Delivery"
-                checked={paymentMethod === "Cash on Delivery"}
+                value="Stripe"
+                checked={paymentMethod === "Stripe"}
                 onChange={(e) => setPaymentMethod(e.target.value)}
                 className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
               />
               <label htmlFor="COD" className="ml-3 block text-sm font-medium text-gray-100">
-                Cash on Delivery
+                Stripe
               </label>
             </div>
             

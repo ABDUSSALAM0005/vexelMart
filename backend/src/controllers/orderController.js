@@ -3,7 +3,7 @@ import Order from '../models/orderModel.js';
 // @desc    Create new order
 // @route   POST /api/orders
 // @access  Private
-const addOrderItems = async (req, res) => {
+export async function addOrderItems (req, res) {
   try {
     const {
       orderItems,
@@ -53,4 +53,43 @@ const addOrderItems = async (req, res) => {
   }
 };
 
-export { addOrderItems };
+export async function getOrderById(req, res) {
+  try {
+    // We populate 'user' to get the name and email associated with this order
+    const order = await Order.findById(req.params.id).populate('user', 'name email');
+
+    if (order) {
+      res.json(order);
+    } else {
+      res.status(404).json({ message: 'Order not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+export const updateOrderToPaid = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (order) {
+      order.isPaid = true;
+      order.paidAt = Date.now();
+      
+      // We save the details Paystack gives us here
+      order.paymentResult = {
+        id: req.body.id,             // Paystack Reference
+        status: req.body.status,     // "success"
+        update_time: req.body.update_time,
+        email_address: req.body.email_address,
+      };
+
+      const updatedOrder = await order.save();
+      res.json(updatedOrder);
+    } else {
+      res.status(404).json({ message: "Order not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+};

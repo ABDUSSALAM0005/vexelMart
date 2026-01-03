@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useCart } from "../context/CartContext"; // Import your context
 import { useNavigate } from "react-router-dom";
 import VexelMartLogo from "../assets/img/VexelMartLogo"
+import CheckoutSteps from "./CheckOutSteps";
 
 
 export default function ShippingAddress() {
@@ -34,8 +35,9 @@ export default function ShippingAddress() {
   };
 
   return (
-    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+    <div className="flex min-h-full flex-col justify-center px-6 pt-12 lg:px-8">
+          <CheckoutSteps step1 step2  />
+      <div className="sm:mx-auto justify-center sm:w-full sm:max-w-sm">
         <VexelMartLogo className="h-12 mx-auto w-auto" />
         <h2 className="mt-1 text-center text-2xl font-bold tracking-tight text-white">
           Shipping Address
