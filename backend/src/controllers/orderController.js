@@ -1,4 +1,10 @@
 import Order from '../models/orderModel.js';
+import Product from '../models/productModel.js';
+import dotenv from 'dotenv';
+import axios from 'axios';
+
+
+dotenv.config()
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -68,28 +74,127 @@ export async function getOrderById(req, res) {
   }
 };
 
+export const getMyOrders = async (req, res) => {
+  try {
+    // Find orders where the 'user' field matches the logged-in ID
+    const orders = await Order.find({ user: req.user._id });
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+// export const updateOrderToPaid = async (req, res) => {
+//   try {
+//     const order = await Order.findById(req.params.id);
+
+//     if (order) {
+//       order.isPaid = true;
+//       order.paidAt = Date.now();
+      
+//       // We save the details Paystack gives us here
+//       order.paymentResult = {
+//         id: req.body.id,             // Paystack Reference
+//         status: req.body.status,     // "success"
+//         update_time: req.body.update_time,
+//         email_address: req.body.email_address,
+//       };
+
+//       const updatedOrder = await order.save();
+
+//       // ✅ 2. NEW LOGIC: Update Product CountInStock
+      
+//       // Loop through every item in the order
+//       for (const item of order.orderItems) {
+        
+//         // Find the product in the database
+//         const product = await Product.findById(item.product);
+
+//         if (product) {
+//           // Decrease stock by the quantity bought
+//           product.countInStock = product.countInStock - item.qty;
+
+//           // Save the updated product
+//           await product.save();
+//         }
+//       }
+
+//       res.json(updatedOrder);
+//     } else {
+//       res.status(404).json({ message: "Order not found" });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ message: "Server Error" });
+//   }
+// };
+
 export const updateOrderToPaid = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
+    const paymentReference = req.body.id; // This comes from frontend { id: reference }
 
-    if (order) {
-      order.isPaid = true;
-      order.paidAt = Date.now();
-      
-      // We save the details Paystack gives us here
-      order.paymentResult = {
-        id: req.body.id,             // Paystack Reference
-        status: req.body.status,     // "success"
-        update_time: req.body.update_time,
-        email_address: req.body.email_address,
-      };
-
-      const updatedOrder = await order.save();
-      res.json(updatedOrder);
-    } else {
-      res.status(404).json({ message: "Order not found" });
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
     }
+
+    // ----------------------------------------------------------------
+    // 🔒 SECURITY CHECK: Verify Transaction with Paystack
+    // ----------------------------------------------------------------
+    
+    // We call Paystack servers directly using our SECRET KEY
+    const paystackUrl = `https://api.paystack.co/transaction/verify/${paymentReference}`;
+    
+    const config = {
+      headers: {
+        Authorization: `Bearer ${process.env.VITE_PAYSTACK_PRIVATE_KEY}`,
+      },
+    };
+
+    const { data: paystackResponse } = await axios.get(paystackUrl, config);
+    const { status, amount, currency } = paystackResponse.data;
+
+    // Check 1: Was the transaction actually successful?
+    if (status !== 'success') {
+      return res.status(400).json({ message: "Payment verification failed" });
+    }
+
+    // Check 2: Did they pay the correct amount?
+    // We allow a small difference due to floating point math
+    const expectedAmount = Math.round(order.totalPrice * 100);
+    if (amount !== expectedAmount) {
+      return res.status(400).json({ message: "Invalid payment amount detected" });
+    }
+
+    // ----------------------------------------------------------------
+    // ✅ VERIFICATION PASSED - SAVE TO DB
+    // ----------------------------------------------------------------
+
+    order.isPaid = true;
+    order.paidAt = Date.now();
+    order.paymentResult = {
+      id: req.body.id,
+      status: status,
+      update_time: String(Date.now()),
+      email_address: req.body.email_address,
+    };
+
+    const updatedOrder = await order.save();
+
+    // ----------------------------------------------------------------
+    // 📦 STOCK UPDATE (Deduct Inventory)
+    // ----------------------------------------------------------------
+    for (const item of order.orderItems) {
+      const product = await Product.findById(item.product);
+      if (product) {
+        product.countInStock = product.countInStock - item.qty;
+        await product.save();
+      }
+    }
+
+    res.json(updatedOrder);
+
   } catch (error) {
-    res.status(500).json({ message: "Server Error" });
+    console.error("Verification Error:", error.response?.data || error.message);
+    res.status(500).json({ message: "Payment Verification Failed" });
   }
 };

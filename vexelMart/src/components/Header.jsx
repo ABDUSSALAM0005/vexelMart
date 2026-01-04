@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar"; // Your Nav component
-import { ShoppingCart, User, Search, Menu } from "lucide-react";
+import { ShoppingCart, User, Search, Menu, DoorOpenIcon, ExternalLinkIcon, LogOutIcon } from "lucide-react";
 // FIX: Use the standard alias for components
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
@@ -11,18 +11,24 @@ import VexelMartLogo from "../assets/img/VexelMartLogo";
 import MobileNav from "./MobileNav";
 import CartIcon from "./CartIcon";
 import { useAuth } from "../context/AuthContext";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useCart } from "../context/CartContext";
+import SearchBox from "./SearchBox";
 
 const Header = () => {
   const { user, logoutAction } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [keyword, setKeyword] = useState("");
+
   // const { dispatch } = useCart();
 
   const logoutHandler = () => {
-  logoutAction();
-};
+    logoutAction();
+  };
 
   return (
-
     // Outer container: Sticky, dark card background
     <header className="sticky top-0 z-50 bg-card border-b border-border shadow-lg">
       {/* === MAIN FLEX ROW (LOGO | SEARCH BAR | ICONS) === */}
@@ -48,20 +54,18 @@ const Header = () => {
         <div className="flex items-center space-x-3">
           {/* Search Input (Desktop Only) */}
           <div className="hidden lg:flex relative w-64">
-            {" "}
-            {/* Show full search input only on extra large screens */}
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder="Search..."
-              className="w-full pl-10 h-9 bg-background border-border rounded-full"
-            />
+            <SearchBox/>
           </div>
 
           {/* User Profile / Sign In Icon */}
           {user ? (
             <>
-              <button className="transition-all duration-300 hover:text-white/80" onClick={logoutHandler}>Logout</button>
+              <button
+                className="flex transition-all duration-300 hover:text-primary/60"
+                onClick={logoutHandler}
+              >
+                <LogOutIcon/> Logout
+              </button>
             </>
           ) : (
             <Link to="/signin">Sign In</Link>

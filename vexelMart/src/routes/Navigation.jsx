@@ -9,11 +9,12 @@ import CartPage from "../pages/CartPage"
 import SignIn from "../pages/SignIn"
 import Shipping from "../pages/Shipping"
 import ProtectedRoute from "./ProtectedRoute"
-import ProfilePage from "../pages/ProfilePage"
+import ProfileScreen from "../pages/ProfileScreen"
 import Register from "../pages/Register"
 import PaymentMethod from "../pages/PaymentMethod"
 import PlaceOrder from "../pages/PlaceOrder"
 import Order from "../pages/Order"
+import SearchScreen from "../components/SearchScreen"
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register />,
+      },
+      {
+        path: "/search",
+        element: <SearchScreen />,
       },
       {
         path: "/shipping",
@@ -74,7 +79,7 @@ const router = createBrowserRouter([
         path: "/profile",
         element: 
         <ProtectedRoute>
-          <ProfilePage/>
+          <ProfileScreen/>
         </ProtectedRoute>
       }
 

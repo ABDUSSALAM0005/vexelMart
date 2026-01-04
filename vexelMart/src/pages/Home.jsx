@@ -30,14 +30,16 @@
 
 // export default Home
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Hero from "../components/Hero";
 import ProductList from "../components/ProductList";
 import Category from "../components/Category";
+import api from "../components/lib/axios";
+import { useParams } from "react-router-dom";
 
 
 export default function Example() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
 
   return (
     <div className="">

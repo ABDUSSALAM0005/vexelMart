@@ -9,16 +9,12 @@ const Links = [
     path: "/",
   },
   {
-    name: "Categories",
-    path: "/categories",
-  },
-  {
-    name: "Orders",
-    path: "/orders", // Requires JWT/Login
-  },
-  {
     name: "Contact Us",
     path: "/contact",
+  },
+  {
+    name: "About Us",
+    path: "/about",
   },
 ];
 

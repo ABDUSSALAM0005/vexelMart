@@ -7,9 +7,9 @@ const router = express.Router();
 
 router.get("/", getProducts);
 
-router.get("/:id", getProductsById);
-
 router.get("/slug/:slug", getProductsBySlug);
+
+router.get("/:id", getProductsById);
  
 router.post("/", createProducts)
 

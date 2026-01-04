@@ -14,6 +14,7 @@ import {
   SheetTrigger,
 } from "../components/ui/sheet";
 import { Button } from "./ui/button";
+import SearchBar from "./SearchBox";
 
 const Links = [
   {
@@ -42,7 +43,7 @@ const MobileNav = () => {
           <Menu className="text-4xl  cursor-pointer" />
         </SheetTrigger>
 
-        <SheetContent>
+        <SheetContent className="bg-card/60">
           <motion.div>
             {/*Logo*/}
             <SheetTitle className="mt-32 mb-40 text-center text-2xl ">
@@ -56,14 +57,9 @@ const MobileNav = () => {
             </SheetTitle>
 
            
-              <div className="flex justify-end relative bottom-20 ">
-        <div className="flex  relative w-auto"> {/* Show full search input only on extra large screens */}
-            <Search className="absolute left-3 top-5 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input 
-              type="text" 
-              placeholder="Search..."
-              className="w-full pl-10 h-9 bg-background border-border rounded-full" 
-            />
+        <div className="flex justify-end relative bottom-20 ">
+        <div className="flex relative w-auto "> {/* Show full search input only on extra large screens */}
+             <SearchBar />
             <Button className="relative right-9 h-9 rounded-full">
                 Search
             </Button>

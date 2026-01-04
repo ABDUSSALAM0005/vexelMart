@@ -8,7 +8,17 @@ export async function insertProducts(req, res) {
 
 export async function getProducts(req, res) {
     try{
-        const products = await Product.find().sort({ createdAt: -1 });
+        // 1. Check if there is a 'keyword' in the URL query
+    const keyword = req.query.keyword
+      ? {
+          name: {
+            $regex: req.query.keyword, // Search for this word
+            $options: "i",             // "i" means case-insensitive (iPhone = iphone)
+          },
+        }
+      : {}; // If no keyword, search for everything {}
+
+        const products = await Product.find({ ...keyword }).sort({ createdAt: -1 });
         res.status(200).json(products);
 
     } catch (error) {

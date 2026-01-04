@@ -35,3 +35,15 @@ export const payOrder = async (orderId, paymentResult) => {
   const { data } = await api.put(`/orders/${orderId}/pay`, paymentResult);
   return data;
 };
+
+// Get logged in user's orders
+export const listMyOrders = async () => {
+  const { data } = await api.get('/orders/myorders');
+  return data;
+};
+
+// Update User Profile (Optional, if you want them to change password later)
+export const updateUserProfile = async (user) => {
+  const { data } = await api.put('/user/profile', user);
+  return data;
+};

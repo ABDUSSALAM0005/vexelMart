@@ -47,3 +47,32 @@
     color: hsl(var(--foreground)); 
   }
 }
+
+/* Search Bar Styles */
+.search-form {
+  display: flex;
+  gap: 10px; /* Space between input and button */
+}
+
+.search-input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-button {
+  padding: 0.5rem 1rem;
+  background-color: #f0c040; /* Amazon-like yellow, or your theme color */
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* Product Grid Styles (Replaces <Row> and <Col>) */
+.products-container {
+  display: grid;
+  /* This creates a responsive grid automatically */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+  gap: 2rem;
+  padding: 1rem;
+}
