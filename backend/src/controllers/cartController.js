@@ -52,7 +52,7 @@
 // Add to Cart
 
 
-import User from "../models/userMosdel.js";
+import User from "../models/userModel.js";
 
 // GET USER CART
 export const getUserCart = async (req, res) => {

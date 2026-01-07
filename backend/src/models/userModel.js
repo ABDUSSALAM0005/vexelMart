@@ -23,6 +23,12 @@ const userSchema = new mongoose.Schema(
       minlength: 6,
     },
 
+    // --- EMAIL VERIFICATION ---
+    isVerified: { type: Boolean, default: false },
+    verificationCode: { type: String },
+    verificationCodeExpires: { type: Date },
+    // -----------------------
+
     isAdmin: {
       type: Boolean,
       default: false,

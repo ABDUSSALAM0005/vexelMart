@@ -15,6 +15,11 @@ import PaymentMethod from "../pages/PaymentMethod"
 import PlaceOrder from "../pages/PlaceOrder"
 import Order from "../pages/Order"
 import SearchScreen from "../components/SearchScreen"
+import UserProfile from "../components/UserProfile"
+import UserOrders from "../components/UserOrders"
+import Reviews from "../components/Reviews"
+import Security from "../components/Security"
+import VerifyEmail from "../pages/VerifyEmail"
 
 const router = createBrowserRouter([
   {
@@ -42,6 +47,13 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register />,
+      },
+      {
+        path: "/verify-email",
+        element: 
+        <ProtectedRoute> 
+          <VerifyEmail />,
+        </ProtectedRoute>
       },
       {
         path: "/search",
@@ -75,13 +87,35 @@ const router = createBrowserRouter([
         <PaymentMethod />
         </ProtectedRoute>
       },
+       // === START OF NESTED PROFILE ROUTES ===
       {
         path: "/profile",
-        element: 
-        <ProtectedRoute>
-          <ProfileScreen/>
-        </ProtectedRoute>
-      }
+        element: (
+          <ProtectedRoute>
+            <ProfileScreen /> 
+          </ProtectedRoute>
+        ),
+        // This 'children' array renders INSIDE ProfileScreen's <Outlet/>
+        children: [
+          {
+            index: true, // Matches "/profile" exactly
+            element: <UserProfile />, // This is your default view (Info/Settings)
+          },
+          {
+            path: "orders", // Matches "/profile/orders"
+            element: <UserOrders />,
+          },
+          {
+            path: "reviews", // Matches "/profile/security"
+            element: <Reviews />
+          },
+          {
+            path: "security", // Matches "/profile/security"
+            element: <Security />
+          },
+        ],
+      },
+      // === END OF NESTED PROFILE ROUTES ===
 
     ],
   },

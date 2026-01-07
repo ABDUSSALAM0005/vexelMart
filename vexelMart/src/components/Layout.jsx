@@ -11,7 +11,7 @@ function Layout() {
 
       {/* PAGE CONTENT */}
       {/* Using max-w-7xl mx-auto for professional centered layout */}
-      <div className="pt-10 px-5 max-w-7xl mx-auto">
+      <div className="pt-10 px-5 max-w-8xl mx-auto">
         <main>
           <Outlet />
         </main>
