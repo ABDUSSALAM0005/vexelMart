@@ -20,6 +20,8 @@ import UserOrders from "../components/UserOrders"
 import Reviews from "../components/Reviews"
 import Security from "../components/Security"
 import VerifyEmail from "../pages/VerifyEmail"
+import AdminDashboard from "../context/AdminDashboard"
+import AdminRoute from "./AdminRoute"
 
 const router = createBrowserRouter([
   {
@@ -116,6 +118,36 @@ const router = createBrowserRouter([
         ],
       },
       // === END OF NESTED PROFILE ROUTES ===
+
+       // === START OF NESTED ADMIN ROUTES ===
+      {
+        path: "/admin",
+        element: (
+          <AdminRoute>
+            <ProfileScreen /> 
+          </AdminRoute>
+        ),
+        // This 'children' array renders INSIDE ProfileScreen's <Outlet/>
+        children: [
+          {
+            index: true, // Matches "/admin" exactly
+            element: <AdminDashboard />, // This is your default view (Info/Settings)
+          },
+          {
+            path: "dashboard", // Matches "/admin/dashboard"
+            element: <AdminDashboard />,
+          },
+          {
+            path: "orders", // Matches "/admin/orders"
+            element: <Reviews />
+          },
+          {
+            path: "users", // Matches "/admin/users"
+            element: <Security />
+          },
+        ],
+      },
+      // === END OF NESTED ADMIN ROUTES ===
 
     ],
   },

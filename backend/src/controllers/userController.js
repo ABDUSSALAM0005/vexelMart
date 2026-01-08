@@ -181,6 +181,47 @@ export const completeRegistration = async (req, res) => {
   }
 };
 
+// ... existing imports
+
+// UPDATE USER PROFILE
+export const updateUserProfile = async (req, res) => {
+  try {
+    // req.user comes from your authMiddleware
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+      // Update Name
+      user.name = req.body.name || user.name;
+      
+      // Update Email (Optional: requires re-verification logic in a real app, 
+      // but for now let's allow it or you can comment this line out to lock email)
+      if (req.body.email) {
+          user.email = req.body.email; 
+      }
+
+      // Update Password only if sent
+      if (req.body.password) {
+        user.password = req.body.password; // The pre-save hook in User model will hash this automatically
+      }
+
+      const updatedUser = await user.save();
+
+      res.json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+        token: generateToken(updatedUser._id), // Send a fresh token
+      });
+      
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
 // LOGIN
 // export const loginUser = async (req, res) => {
 //   const { email, password } = req.body;

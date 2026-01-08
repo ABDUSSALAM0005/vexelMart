@@ -1,5 +1,6 @@
 import Order from '../models/orderModel.js';
 import Product from '../models/productModel.js';
+import User from '../models/userModel.js';
 import dotenv from 'dotenv';
 import axios from 'axios';
 
@@ -196,5 +197,84 @@ export const updateOrderToPaid = async (req, res) => {
   } catch (error) {
     console.error("Verification Error:", error.response?.data || error.message);
     res.status(500).json({ message: "Payment Verification Failed" });
+  }
+};
+
+export const getDashboardSummary = async (req, res) => {
+  try {
+    // 1. Total Orders & Sales
+    const orders = await Order.aggregate([
+
+      {
+        $match: { isPaid: true } // <--- Filter: Only Count Paid Orders
+      },
+
+      {
+        $group: {
+          _id: null,
+          numOrders: { $sum: 1 },
+          totalSales: { $sum: '$totalPrice' },
+        },
+      },
+    ]);
+
+    // 2. Total Users
+    const users = await User.aggregate([
+      {
+        $group: {
+          _id: null,
+          numUsers: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // 3. Daily Orders (For the Chart)
+    const dailyOrders = await Order.aggregate([
+
+      {
+        $match: { isPaid: true } // <--- Filter: Only Count Paid Orders
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+          orders: { $sum: 1 },
+          sales: { $sum: '$totalPrice' },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    // 4. Product Categories (For Pie Chart)
+    const productCategories = await Order.aggregate([
+      {
+        $match: { isPaid: true } // Only look at sold items
+      },
+      {
+        $unwind: "$orderItems" // Split order into individual items
+      },
+      {
+        $lookup: {
+          from: "products", // Join with the 'products' collection
+          localField: "orderItems.product",
+          foreignField: "_id",
+          as: "productDoc"
+        }
+      },
+      {
+        $unwind: "$productDoc" // Unpack the joined product array
+      },
+      {
+        $group: {
+          _id: "$productDoc.category", // Group by the Category of the item sold
+          count: { $sum: "$orderItems.qty" } // Sum up the QUANTITY sold
+        }
+      }
+    ]);
+
+    res.send({ users, orders, dailyOrders, productCategories });
+
+  } catch (error) {
+    console.error("Dashboard Error:", error);
+    res.status(500).json({ message: "Error fetching dashboard data" });
   }
 };
