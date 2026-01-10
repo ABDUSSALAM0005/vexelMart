@@ -8,8 +8,12 @@ import {
   verifyEmail,
   resendVerificationCode,
   completeRegistration,
+  getUsers,
+  deleteUser,
+  getUserById,
+  updateUser
 } from "../controllers/userController.js";
-import { protect } from "../middleware/authMiddleware.js";
+import { protect, admin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -23,5 +27,12 @@ router.post("/resend-code", resendVerificationCode);
 
 // PROTECTED ROUTES
 router.get("/profile", protect, getUserProfile);
+
+//Admin Routes
+router.get('/', protect, admin, getUsers);
+
+router.delete('/:id', protect, admin, deleteUser);
+router.get('/:id', protect, admin, deleteUser);
+router.put('/:id', protect, admin, deleteUser);
 
 export default router;

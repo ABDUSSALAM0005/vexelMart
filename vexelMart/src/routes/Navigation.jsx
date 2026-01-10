@@ -24,6 +24,9 @@ import AdminRoute from "./AdminRoute";
 import AdminDashboard from "../Admin/AdminDashboard";
 import AdminProducts from "../admin/AdminProducts";
 import ProductEditScreen from "../admin/ProductEditScreen";
+import AdminOrders from "../admin/AdminOrders";
+import AdminUsers from "../admin/AdminUsers";
+import UserEditScreen from "../admin/UserEditScreen";
 
 const router = createBrowserRouter([
   {
@@ -153,8 +156,16 @@ const router = createBrowserRouter([
             element: <ProductEditScreen />,
           },
           {
+            path: "orders", // Matches "/admin/users"
+            element: <AdminOrders />,
+          },
+          {
             path: "users", // Matches "/admin/users"
-            element: <Security />,
+            element: <AdminUsers />,
+          },
+          {
+            path: "user/:id/edit", // Matches "/admin/users"
+            element: <UserEditScreen />,
           },
         ],
       },

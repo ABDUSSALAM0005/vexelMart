@@ -129,6 +129,42 @@ export const getMyOrders = async (req, res) => {
 //   }
 // };
 
+// ... existing imports
+
+// @desc    Get all orders
+// @route   GET /api/orders
+// @access  Private/Admin
+export const getOrders = async (req, res) => {
+  try {
+    // Populate user ID and name associated with the order
+    const orders = await Order.find({}).populate('user', 'id name');
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+// @desc    Update order to delivered
+// @route   PUT /api/orders/:id/deliver
+// @access  Private/Admin
+export const updateOrderToDelivered = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (order) {
+      order.isDelivered = true;
+      order.deliveredAt = Date.now();
+
+      const updatedOrder = await order.save();
+      res.json(updatedOrder);
+    } else {
+      res.status(404).json({ message: 'Order not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
 export const updateOrderToPaid = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -152,23 +188,35 @@ export const updateOrderToPaid = async (req, res) => {
     };
 
     const { data: paystackResponse } = await axios.get(paystackUrl, config);
-    const { status, amount, currency } = paystackResponse.data;
+    const { status, amount } = paystackResponse.data;
 
     // Check 1: Was the transaction actually successful?
     if (status !== 'success') {
+      console.log("Failed : status is not success")
       return res.status(400).json({ message: "Payment verification failed" });
     }
 
     // Check 2: Did they pay the correct amount?
     // We allow a small difference due to floating point math
     const expectedAmount = Math.round(order.totalPrice * 100);
-    if (amount !== expectedAmount) {
-      return res.status(400).json({ message: "Invalid payment amount detected" });
+
+    // Calculate the difference
+    const difference = Math.abs(amount - expectedAmount);
+    console.log(`Expected: ${expectedAmount}, Received: ${amount}, Diff: ${difference}`);
+
+  if (difference > 5) {
+      return res.status(400).json({ 
+          message: "Invalid payment amount", 
+          expected: expectedAmount, 
+          received: amount 
+      });
     }
 
     // ----------------------------------------------------------------
     // ✅ VERIFICATION PASSED - SAVE TO DB
     // ----------------------------------------------------------------
+   console.log("✅ Verification Passed! Saving...");
+   
 
     order.isPaid = true;
     order.paidAt = Date.now();
@@ -195,7 +243,7 @@ export const updateOrderToPaid = async (req, res) => {
     res.json(updatedOrder);
 
   } catch (error) {
-    console.error("Verification Error:", error.response?.data || error.message);
+    console.error("CRITICAL ERROR", error.response?.data || error.message);
     res.status(500).json({ message: "Payment Verification Failed" });
   }
 };

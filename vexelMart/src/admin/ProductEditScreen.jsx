@@ -17,6 +17,7 @@ export default function ProductEditScreen() {
   const [price, setPrice] = useState(0);
   const [image, setImage] = useState('');
   const [brand, setBrand] = useState('');
+  const [slug, setSlug] = useState('');
   const [category, setCategory] = useState('');
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState('');
@@ -60,6 +61,7 @@ export default function ProductEditScreen() {
         setPrice(data.price);
         setImage(data.image);
         setBrand(data.brand);
+        setSlug(data.slug);
         setCategory(data.category);
         setCountInStock(data.countInStock);
         setDescription(data.description);
@@ -85,6 +87,7 @@ export default function ProductEditScreen() {
         price,
         image,
         brand,
+        slug,
         category,
         countInStock,
         description,
@@ -178,6 +181,18 @@ export default function ProductEditScreen() {
                 className="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 text-white focus:border-indigo-500 outline-none"
               />
             </div>
+          </div>
+          
+           {/* Slug */}
+          <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Slug</label>
+              <input
+                type="text"
+                required
+                value={slug}
+                onChange={(e) => setSlug(e.target.value)}
+                className="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 text-white focus:border-indigo-500 outline-none"
+              />
           </div>
 
           {/* Image URL */}
