@@ -317,6 +317,35 @@ export default function VerifyEmail() {
     }
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const code = otp.join('');
+
+  //   if (code.length < 4) {
+  //     return toast.error("Enter the full 4-digit code");
+  //   }
+
+  //   try {
+  //     setLoading(true);
+  //     const { data } = await api.post('/user/verify-email', {
+  //       email,
+  //       code
+  //     });
+
+  //     toast.success("Email verified!");
+  //     if (login) login(data);
+  //     localStorage.setItem('userInfo', JSON.stringify(data));
+  //     navigate('/');
+  //   } catch (err) {
+  //     toast.error(err.response?.data?.message || "Invalid code");
+  //     setOtp(['', '', '', '']);
+  //     inputRefs.current[0]?.focus();
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const code = otp.join('');
@@ -327,17 +356,24 @@ export default function VerifyEmail() {
 
     try {
       setLoading(true);
-      const { data } = await api.post('/user/verify-email', {
-        email
+      
+      // === UPDATE THIS URL ===
+      const { data } = await api.post('/users/confirm-email', {
+        email,
+        code
       });
 
       toast.success("Email verified!");
+      
+      // Save user data & login
       if (login) login(data);
       localStorage.setItem('userInfo', JSON.stringify(data));
+      
       navigate('/');
+      
     } catch (err) {
       toast.error(err.response?.data?.message || "Invalid code");
-      setOtp(['', '', '', '']);
+      setOtp(['', '', '', '']); // Clear inputs
       inputRefs.current[0]?.focus();
     } finally {
       setLoading(false);

@@ -495,15 +495,35 @@ export default function Register() {
   };
 
   // --- STEP 2: VERIFY (Local Check + Move to Step 3) ---
-  const handleVerifyStep = (e) => {
+// --- STEP 2: VERIFY (Server Check + Move to Step 3) ---
+  const handleVerifyStep = async (e) => {
     e.preventDefault();
+    
     const code = otp.join('');
     if (code.length !== 4) {
       return toast.error("Please enter the full 4-digit code");
     }
-    // Note: We verify the code against the backend at the very end (Step 3)
-    // to keep the API simple, but you could add a check here if desired.
-    setStep(3); 
+
+    setLoading(true); // Show spinner while checking
+
+    try {
+      // 1. Ask Backend: "Is this code correct for this email?"
+      // Make sure this URL matches your server.js prefix (e.g., /users/validate-code)
+      await api.post('/user/validate-code', { email, code });
+
+      // 2. If backend says OK (200), move to next step
+      setStep(3); 
+      
+    } catch (error) {
+      // 3. If backend says Error (400), stay on this step and show error
+      const msg = error.response?.data?.message || "Invalid or expired code";
+      toast.error(msg);
+      
+      // Optional: Clear OTP field on error?
+      // setOtp(['', '', '', '']); 
+    } finally {
+      setLoading(false);
+    }
   };
 
   // --- RESEND LOGIC ---
@@ -649,13 +669,13 @@ export default function Register() {
         {/* === STEP 3: DETAILS FORM === */}
         {step === 3 && (
           <form onSubmit={handleFinalize} className="space-y-6">
-            <button
+            {/* <button
               type="button"
               onClick={() => setStep(2)}
               className="text-gray-400 flex items-center gap-1 mb-2 text-sm hover:text-white transition"
             >
               <ArrowLeft className="w-4 h-4" /> Back
-            </button>
+            </button> */}
             
             <div>
               <label className="block text-sm font-medium text-gray-100">Full Name</label>

@@ -65,6 +65,7 @@ export default function UserEditScreen() {
               type="text"
               required
               value={name}
+              placeholder={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 text-white focus:border-indigo-500 outline-none"
             />

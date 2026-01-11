@@ -11,7 +11,8 @@ import {
   getUsers,
   deleteUser,
   getUserById,
-  updateUser
+  updateUser,
+  validateOTP,
 } from "../controllers/userController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 
@@ -22,6 +23,7 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 
 router.post("/verify-email", verifyEmail);
+router.post("/validate-code", validateOTP);
 router.post("/complete-register", completeRegistration);
 router.post("/resend-code", resendVerificationCode);
 
@@ -32,7 +34,7 @@ router.get("/profile", protect, getUserProfile);
 router.get('/', protect, admin, getUsers);
 
 router.delete('/:id', protect, admin, deleteUser);
-router.get('/:id', protect, admin, deleteUser);
-router.put('/:id', protect, admin, deleteUser);
+router.get('/:id', protect, admin, getUserById);
+router.put('/:id', protect, admin, updateUser);
 
 export default router;

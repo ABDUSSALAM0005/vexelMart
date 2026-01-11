@@ -111,7 +111,7 @@ export const resendVerificationCode = async (req, res) => {
 
 // STEP 1: INITIATE (User enters email -> We send OTP)
 export const verifyEmail = async (req, res) => {
-  const { email } = req.body;
+  const { email, } = req.body;
 
   try {
     // 1. Check if user already exists in MAIN database
@@ -141,6 +141,33 @@ export const verifyEmail = async (req, res) => {
   }
 };
 
+// userController.js
+
+// NEW: Validate Code (Used in Step 2)
+export const validateOTP = async (req, res) => {
+  const { email, code } = req.body;
+
+  try {
+    const record = await Verification.findOne({ email, code });
+
+    if (!record) {
+      return res.status(400).json({ message: "Invalid or expired code" });
+    }
+
+    // Strict 1-Minute Check
+    const timeDifference = Date.now() - new Date(record.createdAt).getTime();
+    
+    // 60 * 1000 ms = 1 Minute
+    if (timeDifference > 60 * 1000) {
+      return res.status(400).json({ message: "Code has expired" });
+    }
+
+    res.status(200).json({ message: "Code is valid" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server validation error" });
+  }
+};
 // STEP 2: COMPLETE (User enters details + OTP code as proof)
 export const completeRegistration = async (req, res) => {
   const { name, email, password, code } = req.body;
@@ -180,8 +207,6 @@ export const completeRegistration = async (req, res) => {
     res.status(500).json({ message: "Registration failed." });
   }
 };
-
-// ... existing imports
 
 // UPDATE USER PROFILE
 export const updateUserProfile = async (req, res) => {
@@ -330,17 +355,24 @@ export const getUserById = async (req, res) => {
   }
 };
 
-// @desc    Update user
+// @desc    Update user (Admin only)
 // @route   PUT /api/users/:id
 // @access  Private/Admin
 export const updateUser = async (req, res) => {
   try {
+    // 1. Find the user by the ID in the URL (req.params.id), NOT the logged in user
     const user = await User.findById(req.params.id);
 
     if (user) {
+      // 2. Update basic fields only if they are provided
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
-      user.isAdmin = Boolean(req.body.isAdmin);
+      
+      // 3. THE IMPORTANT PART: Update isAdmin status
+      // We check undefined because isAdmin can be 'false'
+      if (req.body.isAdmin !== undefined) {
+          user.isAdmin = req.body.isAdmin;
+      }
 
       const updatedUser = await user.save();
 
