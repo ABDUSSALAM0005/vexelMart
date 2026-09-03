@@ -113,3 +113,46 @@ export async function deleteProducts(req, res) {
     console.error("Error in deleting", error);
     res.status(500).json({ message: "Internal server error" });
  }}
+
+ export const createProductReview = async (req, res) => {
+  const { rating, comment } = req.body;
+
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    // 1. Check if user already reviewed
+    const alreadyReviewed = product.reviews.find(
+      (r) => r.user.toString() === req.user._id.toString()
+    );
+
+    if (alreadyReviewed) {
+      res.status(400);
+      throw new Error('Product already reviewed');
+    }
+
+    // 2. Create the review object
+    const review = {
+      name: req.user.name,
+      rating: Number(rating),
+      comment,
+      user: req.user._id,
+    };
+
+    // 3. Add to reviews array
+    product.reviews.push(review);
+
+    // 4. Recalculate Totals
+    product.numReviews = product.reviews.length;
+    
+    // Calculate Average: (Sum of all ratings) / (Number of reviews)
+    product.rating =
+      product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+      product.reviews.length;
+
+    await product.save();
+    res.status(201).json({ message: 'Review added' });
+  } else {
+    res.status(404);
+    throw new Error('Product not found');
+  }
+};

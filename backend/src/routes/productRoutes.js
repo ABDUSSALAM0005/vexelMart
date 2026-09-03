@@ -1,5 +1,5 @@
 import express from "express";
-import { insertProducts, getProducts, getProductsById,  getProductsBySlug, createProducts, updateProducts, deleteProducts } from "../controllers/productControllers.js";
+import { insertProducts, getProducts, getProductsById,  getProductsBySlug, createProducts, updateProducts, deleteProducts, createProductReview } from "../controllers/productControllers.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -9,6 +9,8 @@ const router = express.Router();
 router.get("/", getProducts);
 
 router.get("/slug/:slug", getProductsBySlug);
+
+router.get("/:id/reviews", createProductReview);
 
 router.get("/:id", getProductsById);
  

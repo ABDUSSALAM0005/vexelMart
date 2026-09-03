@@ -232,12 +232,21 @@ export const updateOrderToPaid = async (req, res) => {
     // ----------------------------------------------------------------
     // 📦 STOCK UPDATE (Deduct Inventory)
     // ----------------------------------------------------------------
+    // for (const item of order.orderItems) {
+    //   const product = await Product.findById(item.product);
+    //   if (product) {
+    //     product.countInStock = product.countInStock - item.qty;
+    //     await product.save();
+    //   }
+    // }
+
     for (const item of order.orderItems) {
-      const product = await Product.findById(item.product);
-      if (product) {
-        product.countInStock = product.countInStock - item.qty;
-        await product.save();
-      }
+      // Use updateOne with $inc to bypass strict document validation 
+      // and only update the stock number.
+      await Product.updateOne(
+        { _id: item.product },
+        { $inc: { countInStock: -item.qty } } 
+      );
     }
 
     res.json(updatedOrder);
